@@ -1,6 +1,5 @@
 # Projet Gare OpenGL
 ## DUT Informatique Maubeuge
 --------------------------
-DUBOIS Fabien
-RATO Antoine
-HEMBISE Corentin
+
+DUBOIS Fabien, RATO Antoine, HEMBISE Corentin
