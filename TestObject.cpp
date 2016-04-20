@@ -481,10 +481,10 @@ void Timer(int value)
             g_camera.Strafe(-g_translation_speed);
         }
         else if(g_mouse_left_down) {
-            g_camera.Fly(-g_translation_speed);
+            g_camera.Fly(g_translation_speed);
         }
         else if(g_mouse_right_down) {
-            g_camera.Fly(g_translation_speed);
+            g_camera.Fly(-g_translation_speed);
         }
     }
 
@@ -529,7 +529,7 @@ void MouseMotion(int x, int y)
 
     if(g_fps_mode) {
         int dx = x - g_viewport_width/2;
-        int dy = y - g_viewport_height/2;
+        int dy = g_viewport_height/2 - y;
 
         if(dx) {
             g_camera.RotateYaw(g_rotation_speed*dx);
@@ -541,7 +541,7 @@ void MouseMotion(int x, int y)
 
         glutWarpPointer(g_viewport_width/2, g_viewport_height/2);
 
-        just_warped = false;
+        just_warped = true;
     }
 }
 
@@ -551,7 +551,7 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("Mon cylindre");
+	glutCreateWindow("Projet Gare : C.HEMBISE / F.DUBOIS / A.RATO");
 	glutIgnoreKeyRepeat(1);
 	
 
