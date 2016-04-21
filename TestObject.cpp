@@ -62,7 +62,6 @@ void MouseMotion(int x, int y);
 void Mouse(int button, int state, int x, int y);
 void Timer(int value);
 void Idle();
-void Grid();
 
 //Declaration des variables et de la FreeFlyCaméra
 Camera g_camera;
@@ -179,8 +178,6 @@ void display(void) {
 	g_camera.Refresh();
 
     glColor3f(1.0f, 0.15f, 0.15f);
-
-    Grid();
 
 	//rotation_souris(angleX, angleY);
 
@@ -480,28 +477,6 @@ glutPostRedisplay();
 
 //*****************************************AJOUT DE FREE FLY CAMERA****************************************************************
 
-void Grid()
-{
-    glPushMatrix();
-    glColor3f(1,1,1);
-
-    for(int i=-50; i < 50; i++) {
-        glBegin(GL_LINES);
-        glVertex3f(i, 0, -50);
-        glVertex3f(i, 0, 50);
-        glEnd();
-    }
-
-    for(int i=-50; i < 50; i++) {
-        glBegin(GL_LINES);
-        glVertex3f(-50, 0, i);
-        glVertex3f(50, 0, i);
-        glEnd();
-    }
-
-    glPopMatrix();
-}
-
 /*
 void Display (void) {
     glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
@@ -513,7 +488,6 @@ void Display (void) {
     glColor3f(0,1,0);
 
     glutWireTeapot(0.5);
-    Grid();
 
     glutSwapBuffers(); //swap the buffers
 }
