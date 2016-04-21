@@ -1,5 +1,16 @@
+#include "Train.h"
 #include "Object.h"
-#include "Point.h"
+#include "Roue.h"
+#include "Parallelepiped.h"
+#include "Chemine.hpp"
+#include "Wagon.hpp"
+#include "Tube.hpp"
+#include "Locomotive.hpp"
+
+
+
+
+
 
 #ifdef __APPLE__
 //compilation sous MacOs par :
@@ -22,18 +33,41 @@
 #include <GL/glut.h>
 #endif
 
-
-Object::Object()
-{
-	//origin[3] = {0, 0, 0};
+Train::Train() {
+    
 }
 
-void Object::glVertex3f(Point p) {
-	glVertex3d(p.x, p.y, p.z);
-}
+void Train::modelize() {
 
-void Object::draw() {
-	glPushMatrix();
-	modelize();
-	glPopMatrix();
+
+    
+    Locomotive l;
+    Locomotive l1;
+    
+
+
+    int nbWagons = 4;
+    float longueur = ((nbWagons + 1) * 6 +(2*0.49) +3.95 )/ 2 ;
+    
+    
+    glTranslated(longueur, 0, 0);
+    l.draw();
+    glPushMatrix();
+    
+    for (int i = 0; i < nbWagons; i++) {
+        Wagon w1;
+        glTranslated(-7, 0, 0);
+        w1.draw();
+    }
+    glPopMatrix();
+ 
+    
+    glPushMatrix();
+    glTranslated(- (longueur*2), 0.1, 0);
+
+    glRotated(-180, 0, 0, 1);
+    l1.draw();
+    glPopMatrix();
+ 
+
 }

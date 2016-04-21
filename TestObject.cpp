@@ -28,11 +28,18 @@
 #include <cstdio>
 #include <cmath>
 
-#include <GL/glut.h>
 
 #include "Object.h"
+#include "Chemine.hpp"
+
 #include "Parallelepiped.h"
 #include "RailDroit.h"
+#include "Train.h"
+#include "Locomotive.hpp"
+#include "Wagon.hpp"
+
+
+
 
 using namespace std;
 
@@ -148,16 +155,17 @@ glColor3f(0.78f, 0.15f, 0.15f);
  /.   .   .
  z
 */
+    
 
- 		RailDroit rd(20, 1.5);
-
- 		Parallelepiped p(2, 2, 2);
+    
+    
+ 		RailDroit rd(50, 1.5);
+    
+        Train t;
  		
- 		rd.draw();
-glPushMatrix();
-	glTranslated(angle/4, 0, 0);
- 	p.draw();
-glPopMatrix();
+ //		rd.draw();
+        t.draw();
+    
 /*
 
 		Parallelepiped o(5,10,7);

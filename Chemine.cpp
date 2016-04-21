@@ -1,5 +1,5 @@
+#include "Chemine.hpp"
 #include "Object.h"
-#include "Point.h"
 
 #ifdef __APPLE__
 //compilation sous MacOs par :
@@ -23,17 +23,25 @@
 #endif
 
 
-Object::Object()
-{
-	//origin[3] = {0, 0, 0};
+const double epaisseur = 3;
+const double hauteur   = 0.5;
+
+Chemine::Chemine() {
+    
 }
 
-void Object::glVertex3f(Point p) {
-	glVertex3d(p.x, p.y, p.z);
-}
-
-void Object::draw() {
-	glPushMatrix();
-	modelize();
-	glPopMatrix();
+void Chemine::modelize() {
+    GLUquadric* params;
+    params = gluNewQuadric();
+    
+    // centre la roue
+    glTranslated(0, epaisseur/2, 0);
+    // place la roue sur le bon axe
+    glRotatef(0, 1, 0, 0);
+    
+    gluQuadricDrawStyle(params,GLU_FILL);
+    gluCylinder(params, hauteur, hauteur, epaisseur, 20, 1);
+    gluDisk(params, 0, hauteur, 20, 1);
+    glTranslated(0, 0, epaisseur);
+    gluDisk(params, 0, hauteur, 20, 1);
 }
