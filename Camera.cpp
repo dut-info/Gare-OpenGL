@@ -5,10 +5,10 @@
 
 void Camera::Init()
 {
-	m_yaw = 0.0;
+	m_yaw = 70.0;
 	m_pitch = 0.0;
 
-	SetPos(0, 0, 0);
+	SetPos(0, 60, -30);
 }
 
 void Camera::Refresh()

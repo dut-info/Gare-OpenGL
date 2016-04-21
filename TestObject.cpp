@@ -94,7 +94,7 @@ int nbPoints = 10;
 float angle;
 
 //Vitesse des mouvements de la caméra
-const float g_translation_speed = 0.005;
+const float g_translation_speed = 0.1;
 const float g_rotation_speed = M_PI/180*0.02;
 
 /* initialisation d'OpenGL*/
@@ -391,7 +391,7 @@ void reshape(int w, int h) {
    glLoadIdentity();
    //gluPerspective(70,(double)700/700,0,2000);
    glOrtho ( -20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f);
-   gluPerspective (1, (GLfloat)w / (GLfloat)h, 0.1 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
+   gluPerspective (1, (GLfloat)w / (GLfloat)h, 0 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
    glMatrixMode(GL_MODELVIEW);
 }
 
