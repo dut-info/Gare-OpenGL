@@ -61,34 +61,34 @@ void normal(Point p0, Point p1, Point p2) {
 }
 
 void Parallelepiped::modelize() {
-
+	//glTranslated(-1, -1, 0);
 	glBegin(GL_QUADS);
-		normal(points[0], points[1], points[2]);		
+		normal(points[0], points[1], points[2]);
 		Object::glVertex3f(points[0]);
 		Object::glVertex3f(points[1]);
 		Object::glVertex3f(points[2]);
 		Object::glVertex3f(points[3]);
-		normal(points[1], points[7], points[6]);			
+		normal(points[1], points[7], points[6]);
 		Object::glVertex3f(points[1]);
 		Object::glVertex3f(points[7]);
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[2]);
-		normal(points[2], points[6], points[5]);			
+		normal(points[2], points[6], points[5]);
 		Object::glVertex3f(points[2]);
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[5]);
 		Object::glVertex3f(points[3]);
-		normal(points[5], points[4], points[0]);			
+		normal(points[5], points[4], points[0]);
 		Object::glVertex3f(points[5]);
 		Object::glVertex3f(points[4]);
 		Object::glVertex3f(points[0]);
 		Object::glVertex3f(points[3]);
-		normal(points[7], points[1], points[0]);			
+		normal(points[7], points[1], points[0]);
 		Object::glVertex3f(points[7]);
 		Object::glVertex3f(points[1]);
 		Object::glVertex3f(points[0]);
 		Object::glVertex3f(points[4]);
-		normal(points[6], points[7], points[4]);			
+		normal(points[6], points[7], points[4]);
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[7]);
 		Object::glVertex3f(points[4]);

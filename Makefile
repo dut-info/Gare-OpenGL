@@ -11,7 +11,7 @@ GL_LIBS= -lGL -lGLU
 CXXINCS =  $(GLUT_INC) $(GL_INC)
 
 #Parametres de compilation
-CXXFLAGS = $(CXXINCS) -std=c++11 -Wall 
+CXXFLAGS = $(CXXINCS) -std=c++11 -Wall
 
 #Chemin d'acces des librairies
 LIBS = $(GL_LIBS) $(GLUT_LIBS)
@@ -23,7 +23,7 @@ PATH_SRC=.
 #Cree l'executable sous Linux
 all: $(EXEC)
 
-$(EXEC): TestObject.o Object.o Point.o Parallelepiped.o RailDroit.o
+$(EXEC): TestObject.o Object.o Point.o Parallelepiped.o RailDroit.o BezierCurve.o Train.o Locomotive.o Wagon.o Roue.o Tube.o Chemine.o
 	$(COMPILO) -o $@ $^ $(LIBS)
 
 TestObject.o:  $(PATH_SRC)/TestObject.cpp

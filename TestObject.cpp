@@ -38,8 +38,10 @@
 #include "Locomotive.hpp"
 #include "Wagon.hpp"
 
+#include "BezierCurve.h"
+#include <vector>
 
-
+#define M_PI 3.14159265358979323846
 
 using namespace std;
 
@@ -142,7 +144,7 @@ void display(void) {
 		rotation_souris(angleX, angleY);
 		affiche_repere();
 
-glColor3f(0.78f, 0.15f, 0.15f);
+glColor3f(1.0f, 0.15f, 0.15f);
 /*
     y
     |
@@ -155,21 +157,108 @@ glColor3f(0.78f, 0.15f, 0.15f);
  /.   .   .
  z
 */
-    
 
-    
-    
- 		RailDroit rd(50, 1.5);
-    
+
+ 				RailDroit rd(50, 1.5);
+
         Train t;
- 		
+
  //		rd.draw();
         t.draw();
-    
 /*
 
+
+		double quai_width = 5;
+/*
+		Parallelepiped p2(200, 200, 200);
+		p2.draw();
+
+
+
+		glPushMatrix();
+			glTranslated(0, -quai_width, 0);
+			p.draw();
+
+		glPopMatrix();
+
+		RailDroit rd1(200, 1.5);
+		RailDroit rd2(200, 1.5);
+
+		glPushMatrix();
+			glTranslated(-100, 1, 0);
+			rd1.draw();
+			glTranslated(0, 4, 0);
+			rd2.draw();
+		glPopMatrix();
+
+Parallelepiped p(2, 2, 2);
+
+		std::vector<Point> points = std::vector<Point>();
+    points.push_back(Point(0.5, 0, 0));
+    points.push_back(Point(1, 3, 0));
+    //points.push_back(Point(2, 6, 1));
+    points.push_back(Point(2, 5, 0));
+
+    BezierCurve bz(points);
+
+    Point f = bz.getPoint(angle/70);
+		Point ta = bz.getTan((angle/70));
+
+    glBegin(GL_LINE_STRIP);
+      for(double i = 0; i <3; i+=0.01) {
+        Point p = bz.getPoint(i);
+        if(&p != NULL)
+          glVertex3d(p.x, p.y, p.z);
+      }
+    glEnd();
+
+		glBegin(GL_LINE_STRIP);
+        	Point pt = bz.getTan(0.5);
+					glVertex3d(0, 0, 0);
+          glVertex3d(pt.x, pt.y, pt.z);
+    glEnd();
+
+
+/*
+		double teta = (2*ta.x*ta.x)/( 2*ta.x* sqrt(ta.x*ta.x + ta.y+ta.y) );
+
+
+
+
+		Parallelepiped ll(0.3, 0.3, 0.3);
+		glPushMatrix();
+			glTranslated(ta.x, ta.y, 0);
+			ll.draw();
+		glPopMatrix();
+double teta = atan2(ta.x, ta.y);
+/*
+		if(teta < 0) {
+			teta += M_PI *2;
+		}
+*/
+
+		//teta = 180 * (teta) / M_PI;
+
+
+/*
+glTranslated(f.x, f.y, 0);
+
+glPushMatrix();
+glRotatef(-teta,0,0,1);
+p.draw();
+
+glPopMatrix();
+*/
+
+/*
+glPushMatrix();
+	glTranslated(angle/4, 0, 0);
+
+glPopMatrix();
+
+
 		Parallelepiped o(5,10,7);
-		
+
 		glRotatef( (angle*angle)/100, 1.0f, 1.0f, 0.0f);
 
 		o.draw();
@@ -211,7 +300,7 @@ glColor3f(0.78f, 0.15f, 0.15f);
 
 					int firstPtn = (i+1)%(nbPoints)+nbPoints;
 					glVertex3f(tab[firstPtn].x, tab[firstPtn].y, tab[firstPtn].z);
-					
+
 					int secondPtn = i+nbPoints;
 					glVertex3f(tab[secondPtn].x, tab[secondPtn].y, tab[secondPtn].z);
 				}
