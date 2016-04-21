@@ -43,17 +43,41 @@
 
 #define M_PI 3.14159265358979323846
 
+#include "Camera.h"
+#include "Camera.cpp"
+
 using namespace std;
 
-#define WIDTH  1200
-#define HEIGHT 1200
+#define WIDTH  600
+#define HEIGHT 600
 
 #define KEY_ESC 27
+
+//Declaration des fonctions
+void Display();
+void Reshape (int w, int h);
+void Keyboard(unsigned char key, int x, int y);
+void KeyboardUp(unsigned char key, int x, int y);
+void MouseMotion(int x, int y);
+void Mouse(int button, int state, int x, int y);
+void Timer(int value);
+void Idle();
+void Grid();
+
+//Declaration des variables et de la FreeFlyCaméra
+Camera g_camera;
+bool g_key[256];
+bool g_shift_down = false;
+bool g_fps_mode = false;
+int g_viewport_width = 0;
+int g_viewport_height = 0;
+bool g_mouse_left_down = false;
+bool g_mouse_right_down = false;
 
 float angleX = 0.0f; //angle de rotation en Y de la scene
 float angleY = 0.0f; //angle de rotation en X de la scene
 
-float pasDeplacement = 1.25f;
+//float pasDeplacement = 1.25f;
 
 
 //position lumiere
@@ -68,6 +92,10 @@ float tz = 0.0f;
 int nbPoints = 10;
 
 float angle;
+
+//Vitesse des mouvements de la caméra
+const float g_translation_speed = 0.005;
+const float g_rotation_speed = M_PI/180*0.02;
 
 /* initialisation d'OpenGL*/
 static void init() {
@@ -101,6 +129,7 @@ static void init() {
     glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,shiny_obj);
 }
 
+/*
 void rotation_souris(float& ax, float& ay) {
 //rotation de la scene suivant les mouvements de la souris
 //cout << "x : " << ax << "   y : " << ay << endl;
@@ -113,6 +142,7 @@ void rotation_souris(float& ax, float& ay) {
 	glRotatef ( -ay, 0.0f, 0.0f, 1.0f );
 	glRotatef ( ax, 0.0f, 1.0f, 0.0f );
 }
+*/
 
 void affiche_repere() {
 //affiche les axes du repere
@@ -137,14 +167,23 @@ glEnd();
 
 /* Dessin */
 void display(void) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //effacement du buffer
+	glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//effacement du buffer
 
 	//Description de la scene
 	glLoadIdentity();
-		rotation_souris(angleX, angleY);
-		affiche_repere();
 
-glColor3f(1.0f, 0.15f, 0.15f);
+
+
+	affiche_repere();
+	g_camera.Refresh();
+
+    glColor3f(1.0f, 0.15f, 0.15f);
+
+    Grid();
+
+	//rotation_souris(angleX, angleY);
+
 /*
     y
     |
@@ -321,6 +360,7 @@ glPopMatrix();
 */
 	glutSwapBuffers();// echange des buffers
 }
+
 /*
 void calculNormal(point3 p1, point3 p2, point3 p3, point3 p4) {
 	double u[3];
@@ -343,21 +383,28 @@ void calculNormal(point3 p1, point3 p2, point3 p3, point3 p4) {
 
 /* Au cas ou la fenetre est modifiee ou deplacee */
 void reshape(int w, int h) {
+   g_viewport_width = w;
+   g_viewport_height = h;
+
    glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    //gluPerspective(70,(double)700/700,0,2000);
    glOrtho ( -20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f);
+   gluPerspective (1, (GLfloat)w / (GLfloat)h, 0.1 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
    glMatrixMode(GL_MODELVIEW);
 }
 
+/*
 GLvoid gestionSouris(int x, int y) {
 	angleX = float(x/2) * 720.0f / float(WIDTH); //gere l'axe Oy
 	angleY = - ( float(y/2) * 180.0f / float(HEIGHT - 90.0f) ) * 4.0f; //gere l'axe Ox
 
 	glutPostRedisplay();
 }
+()*/
 
+/*
 GLvoid gestionFleche(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_UP :
@@ -370,7 +417,10 @@ GLvoid gestionFleche(int key, int x, int y) {
 	}
 	glutPostRedisplay();
 }
+*/
 
+
+/*
 GLvoid window_key_down(unsigned char key, int x, int y)  { //appuie des touches
 	switch (key) {
 		//deplacement de la camera
@@ -418,29 +468,217 @@ GLvoid window_key_down(unsigned char key, int x, int y)  { //appuie des touches
 
 	glutPostRedisplay();
 }
+*/
 
+/*
 GLvoid window_idle()
 {
 	angle+=0.1f;
 glutPostRedisplay();
+}
+*/
 
+//*****************************************AJOUT DE FREE FLY CAMERA****************************************************************
 
+void Grid()
+{
+    glPushMatrix();
+    glColor3f(1,1,1);
+
+    for(int i=-50; i < 50; i++) {
+        glBegin(GL_LINES);
+        glVertex3f(i, 0, -50);
+        glVertex3f(i, 0, 50);
+        glEnd();
+    }
+
+    for(int i=-50; i < 50; i++) {
+        glBegin(GL_LINES);
+        glVertex3f(-50, 0, i);
+        glVertex3f(50, 0, i);
+        glEnd();
+    }
+
+    glPopMatrix();
 }
 
+/*
+void Display (void) {
+    glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color buffer and the depth buffer
+    glLoadIdentity();
+
+	g_camera.Refresh();
+
+    glColor3f(0,1,0);
+
+    glutWireTeapot(0.5);
+    Grid();
+
+    glutSwapBuffers(); //swap the buffers
+}
+*/
+
+/*
+void Reshape (int w, int h) {
+    g_viewport_width = w;
+    g_viewport_height = h;
+
+    glViewport (0, 0, (GLsizei)w, (GLsizei)h); //set the viewport to the current window specifications
+    glMatrixMode (GL_PROJECTION); //set the matrix to projection
+
+    glLoadIdentity ();
+    gluPerspective (60, (GLfloat)w / (GLfloat)h, 0.1 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
+    glMatrixMode (GL_MODELVIEW); //set the matrix back to model
+}
+*/
+
+void Keyboard(unsigned char key, int x, int y)
+{
+    if(key == 27) {
+        exit(0);
+    }
+
+    if(key == ' ') {
+        g_fps_mode = !g_fps_mode;
+
+        if(g_fps_mode) {
+            glutSetCursor(GLUT_CURSOR_NONE);
+            glutWarpPointer(g_viewport_width/2, g_viewport_height/2);
+        }
+        else {
+            glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+        }
+    }
+
+    if(glutGetModifiers() == GLUT_ACTIVE_SHIFT) {
+        g_shift_down = true;
+    }
+    else {
+        g_shift_down = false;
+    }
+
+    g_key[key] = true;
+}
+
+void KeyboardUp(unsigned char key, int x, int y)
+{
+    g_key[key] = false;
+}
+
+void Timer(int value)
+{
+    if(g_fps_mode) {
+        if(g_key['z'] || g_key['Z']) {
+            g_camera.Move(g_translation_speed);
+        }
+        else if(g_key['s'] || g_key['S']) {
+            g_camera.Move(-g_translation_speed);
+        }
+        else if(g_key['q'] || g_key['Q']) {
+            g_camera.Strafe(g_translation_speed);
+        }
+        else if(g_key['d'] || g_key['D']) {
+            g_camera.Strafe(-g_translation_speed);
+        }
+        else if(g_mouse_left_down) {
+            g_camera.Fly(g_translation_speed);
+        }
+        else if(g_mouse_right_down) {
+            g_camera.Fly(-g_translation_speed);
+        }
+    }
+
+    glutTimerFunc(1, Timer, 0);
+}
+
+void Idle()
+{
+    display();
+}
+
+void Mouse(int button, int state, int x, int y)
+{
+    if(state == GLUT_DOWN) {
+        if(button == GLUT_LEFT_BUTTON) {
+            g_mouse_left_down = true;
+        }
+        else if(button == GLUT_RIGHT_BUTTON) {
+            g_mouse_right_down = true;
+        }
+    }
+    else if(state == GLUT_UP) {
+        if(button == GLUT_LEFT_BUTTON) {
+            g_mouse_left_down = false;
+        }
+        else if(button == GLUT_RIGHT_BUTTON) {
+            g_mouse_right_down = false;
+        }
+    }
+}
+
+void MouseMotion(int x, int y)
+{
+    // This variable is hack to stop glutWarpPointer from triggering an event callback to Mouse(...)
+    // This avoids it being called recursively and hanging up the event loop
+    static bool just_warped = false;
+
+    if(just_warped) {
+        just_warped = false;
+        return;
+    }
+
+    if(g_fps_mode) {
+        int dx = x - g_viewport_width/2;
+        int dy = g_viewport_height/2 - y;
+
+        if(dx) {
+            g_camera.RotateYaw(g_rotation_speed*dx);
+        }
+
+        if(dy) {
+            g_camera.RotatePitch(g_rotation_speed*dy);
+        }
+
+        glutWarpPointer(g_viewport_width/2, g_viewport_height/2);
+
+        just_warped = true;
+    }
+}
+
+//*****************MAIN*****************MAIN****************MAIN****************MAIN********************
 int main(int argc, char **argv) {
+	//Ajout pour la caméra
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("Mon cylindre");
+	glutCreateWindow("Projet Gare : C.HEMBISE / F.DUBOIS / A.RATO");
+	glutIgnoreKeyRepeat(1);
+
+
+
+    glutTimerFunc(1, Timer, 0);
+
+
+
+
 
 	init();
 
+	//Ajout pour la caméra
+    glutMouseFunc(Mouse);
+    glutMotionFunc(MouseMotion);
+    glutPassiveMotionFunc(MouseMotion);
+    glutKeyboardFunc(Keyboard);
+    glutKeyboardUpFunc(KeyboardUp);
+    glutIdleFunc(Idle);
+
 	glutReshapeFunc(reshape);
-	glutKeyboardFunc(&window_key_down);
-	glutDisplayFunc(display);
-	glutPassiveMotionFunc(gestionSouris);
-	glutSpecialFunc(&gestionFleche);
-	glutIdleFunc(&window_idle);
+	//glutKeyboardFunc(&window_key_down);
+	//glutDisplayFunc(display);
+	//glutPassiveMotionFunc(gestionSouris);
+	//glutSpecialFunc(&gestionFleche);
+	//glutIdleFunc(&window_idle);
 
 	glutMainLoop();
 
