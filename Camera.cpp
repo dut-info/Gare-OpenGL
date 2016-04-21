@@ -6,9 +6,9 @@
 void Camera::Init()
 {
 	m_yaw = 70.0;
-	m_pitch = 0.0;
+	m_pitch = -0.3;
 
-	SetPos(0, 0, 0);
+	SetPos(-25, 17, -40);
 }
 
 void Camera::Refresh()

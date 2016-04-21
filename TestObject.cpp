@@ -388,7 +388,7 @@ void reshape(int w, int h) {
    glLoadIdentity();
    //gluPerspective(70,(double)700/700,0,2000);
    glOrtho ( -20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f);
-   gluPerspective (1, (GLfloat)w / (GLfloat)h, 0 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
+   gluPerspective (1, (GLfloat)w / (GLfloat)h, 50 , 1); //set the perspective (angle of sight, width, height, ,depth)
    glMatrixMode(GL_MODELVIEW);
 }
 
