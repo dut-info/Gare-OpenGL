@@ -90,10 +90,10 @@ float tz = 0.0f;
 
 int nbPoints = 10;
 
-float angle;
+float indice;
 
 //Vitesse des mouvements de la caméra
-const float g_translation_speed = 0.1;
+const float g_translation_speed = 0.3;
 const float g_rotation_speed = M_PI/180*0.02;
 
 /* initialisation d'OpenGL*/
@@ -128,40 +128,25 @@ static void init() {
     glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,shiny_obj);
 }
 
-/*
-void rotation_souris(float& ax, float& ay) {
-//rotation de la scene suivant les mouvements de la souris
-//cout << "x : " << ax << "   y : " << ay << endl;
-
-	glRotatef ( -ay, 0.0f, 0.0f, 1.0f );
-	glRotatef ( ax, 1.0f, 0.0f, 0.0f );
-
-	glTranslatef ( tx, ty, tz );
-
-	glRotatef ( -ay, 0.0f, 0.0f, 1.0f );
-	glRotatef ( ax, 0.0f, 1.0f, 0.0f );
-}
-*/
-
 void affiche_repere() {
-//affiche les axes du repere
-glColor3f ( 0.0f, 1.0f, 0.0f ); //Y vert
-glBegin(GL_LINES);
-	glVertex3f ( 0.0f, 0.0f, 0.0f );
-	glVertex3f ( 0.0f, 20.0f, 0.0f );
-glEnd();
+	//affiche les axes du repere
+	glColor3f ( 0.0f, 1.0f, 0.0f ); //Y vert
+	glBegin(GL_LINES);
+		glVertex3f ( 0.0f, 0.0f, 0.0f );
+		glVertex3f ( 0.0f, 20.0f, 0.0f );
+	glEnd();
 
-glColor3f ( 0.0f, 0.0f, 1.0f ); //Z bleu
-glBegin(GL_LINES);
-	glVertex3f ( 0.0f, 0.0f, 0.0f );
-	glVertex3f ( 0.0f, 0.0f, 20.0f );
-glEnd();
+	glColor3f ( 0.0f, 0.0f, 1.0f ); //Z bleu
+	glBegin(GL_LINES);
+		glVertex3f ( 0.0f, 0.0f, 0.0f );
+		glVertex3f ( 0.0f, 0.0f, 20.0f );
+	glEnd();
 
-glColor3f ( 1.0f, 0.0f, 0.0f); //X rouge
-glBegin(GL_LINES);
-	glVertex3f ( 0.0f, 0.0f, 0.0f );
-	glVertex3f ( 20.0f, 0.0f, 0.0f );
-glEnd();
+	glColor3f ( 1.0f, 0.0f, 0.0f); //X rouge
+	glBegin(GL_LINES);
+		glVertex3f ( 0.0f, 0.0f, 0.0f );
+		glVertex3f ( 20.0f, 0.0f, 0.0f );
+	glEnd();
 }
 
 /* Dessin */
@@ -169,214 +154,54 @@ void display(void) {
 	glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//effacement du buffer
 
-	//Description de la scene
 	glLoadIdentity();
-
-
 
 	affiche_repere();
 	g_camera.Refresh();
 
-    glColor3f(1.0f, 0.15f, 0.15f);
+  glColor3f(1.0f, 0.15f, 0.15f);
 
-	//rotation_souris(angleX, angleY);
+	glRotatef(-90, 1, 0, 0);
 
-/*
-    y
-    |
-    |
-    |
-    |__________ x
-    /.   .   .
-   /.   .   .
-  /.   .   .
- /.   .   .
- z
-*/
+	// RAILS
+	RailDroit rail1(200, 2.2);
+	RailDroit rail2(200, 2.2);
 
-
- 				RailDroit rd(50, 1.5);
-
-        Train t;
-
- //		rd.draw();
-        t.draw();
-/*
-
-
-		double quai_width = 5;
-/*
-		Parallelepiped p2(200, 200, 200);
-		p2.draw();
-
-
+	glPushMatrix();
+		glTranslatef(-100, 0, 0);
+		rail1.draw();
 
 		glPushMatrix();
-			glTranslated(0, -quai_width, 0);
-			p.draw();
-
+			glTranslatef(0, 4.5, 0);
+			rail2.draw();
 		glPopMatrix();
-
-		RailDroit rd1(200, 1.5);
-		RailDroit rd2(200, 1.5);
-
-		glPushMatrix();
-			glTranslated(-100, 1, 0);
-			rd1.draw();
-			glTranslated(0, 4, 0);
-			rd2.draw();
-		glPopMatrix();
-
-Parallelepiped p(2, 2, 2);
-
-		std::vector<Point> points = std::vector<Point>();
-    points.push_back(Point(0.5, 0, 0));
-    points.push_back(Point(1, 3, 0));
-    //points.push_back(Point(2, 6, 1));
-    points.push_back(Point(2, 5, 0));
-
-    BezierCurve bz(points);
-
-    Point f = bz.getPoint(angle/70);
-		Point ta = bz.getTan((angle/70));
-
-    glBegin(GL_LINE_STRIP);
-      for(double i = 0; i <3; i+=0.01) {
-        Point p = bz.getPoint(i);
-        if(&p != NULL)
-          glVertex3d(p.x, p.y, p.z);
-      }
-    glEnd();
-
-		glBegin(GL_LINE_STRIP);
-        	Point pt = bz.getTan(0.5);
-					glVertex3d(0, 0, 0);
-          glVertex3d(pt.x, pt.y, pt.z);
-    glEnd();
+	glPopMatrix();
 
 
+	// TRAIN
+	Train train1;
+	Train train2;
+
+	float mvnt = indice;
 /*
-		double teta = (2*ta.x*ta.x)/( 2*ta.x* sqrt(ta.x*ta.x + ta.y+ta.y) );
+	if(indice > 50 && indice < 70) {
+		mvnt =
 
-
-
-
-		Parallelepiped ll(0.3, 0.3, 0.3);
-		glPushMatrix();
-			glTranslated(ta.x, ta.y, 0);
-			ll.draw();
-		glPopMatrix();
-double teta = atan2(ta.x, ta.y);
-/*
-		if(teta < 0) {
-			teta += M_PI *2;
-		}
+		3*(indice - 17.15) / sqrt(1 + (indice - 17.15)*(indice - 17.15)) + 2.95;
+	}
 */
+	glPushMatrix();
+		glTranslatef(mvnt/4-50, 1.5, 2.1);
+		train1.draw();
+	glPopMatrix();
 
-		//teta = 180 * (teta) / M_PI;
+	glPushMatrix();
+		glTranslatef(-mvnt/4+50, 6, 2.1);
+		train1.draw();
+	glPopMatrix();
 
-
-/*
-glTranslated(f.x, f.y, 0);
-
-glPushMatrix();
-glRotatef(-teta,0,0,1);
-p.draw();
-
-glPopMatrix();
-*/
-
-/*
-glPushMatrix();
-	glTranslated(angle/4, 0, 0);
-
-glPopMatrix();
-
-
-		Parallelepiped o(5,10,7);
-
-		glRotatef( (angle*angle)/100, 1.0f, 1.0f, 0.0f);
-
-		o.draw();
-
-			double rayon = 4;
-			double hauteur = 20;
-
-			point3 centerBottom(0, 0, -hauteur/2);
-			point3 centerTop(0, 0, hauteur/2);
-
-			point3 tab[2*nbPoints];
-
-			double teta = 2*M_PI/nbPoints;
-
-			for (int i = 0; i < 2*nbPoints; ++i) {
-				double angle = (i%nbPoints+1)*teta;
-				double haut = (i >= nbPoints) ? hauteur/2 : -hauteur/2;
-				tab[i] = point3(rayon*cos(angle), rayon*sin(angle), haut);
-			}
-
-
-			glBegin(GL_TRIANGLES);
-
-				glColor3f (0.1f , 0.8f, 0.8f);
-
-				// Face bas
-				for (int i = 0; i < nbPoints; ++i) {
-					glVertex3f(centerBottom.x, centerBottom.y, centerBottom.z);
-					int firstPtn = (i+1)%nbPoints;
-					glVertex3f(tab[firstPtn].x, tab[firstPtn].y, tab[firstPtn].z);
-					glVertex3f(tab[i].x, tab[i].y, tab[i].z);
-				}
-
-				// Face haut
-				for (int i = 0; i < nbPoints; ++i) {
-					glColor3f (0.8f , 0.1f, 0.8f);
-
-					glVertex3f(centerTop.x, centerTop.y, centerTop.z);
-
-					int firstPtn = (i+1)%(nbPoints)+nbPoints;
-					glVertex3f(tab[firstPtn].x, tab[firstPtn].y, tab[firstPtn].z);
-
-					int secondPtn = i+nbPoints;
-					glVertex3f(tab[secondPtn].x, tab[secondPtn].y, tab[secondPtn].z);
-				}
-
-			glEnd();
-
-			glBegin(GL_QUADS);
-				glColor3f (0.8f , 0.8f, 0.1f);
-				for(int i = 0; i < nbPoints; i++) {
-					int one = (i+1)%nbPoints;
-					glVertex3f(tab[one].x, tab[one].y, tab[one].z);
-					glVertex3f(tab[i].x, tab[i].y, tab[i].z);
-					glVertex3f(tab[i+nbPoints].x, tab[i+nbPoints].y, tab[i+nbPoints].z);
-					int two = (i+1)%nbPoints+nbPoints;
-					glVertex3f(tab[two].x, tab[two].y, tab[two].z);
-				}
-			glEnd();
-*/
 	glutSwapBuffers();// echange des buffers
 }
-
-/*
-void calculNormal(point3 p1, point3 p2, point3 p3, point3 p4) {
-	double u[3];
-	double v[3];
-
-	u[0] = p1.x-p2.x;
-	u[1] = p1.y-p2.y;
-	u[2] = p1.z-p2.z;
-
-	v[0] = p3.x-p4.x;
-	v[1] = p3.y-p4.y;
-	v[2] = p3.z-p4.z;
-
-
-	glNormal3d(u[1]*v[2]-u[2]*v[1],
-			   u[2]*v[0]-u[0]*v[2],
-			   u[0]*v[1]-u[1]*v[0]);
-}
-*/
 
 /* Au cas ou la fenetre est modifiee ou deplacee */
 void reshape(int w, int h) {
@@ -391,121 +216,6 @@ void reshape(int w, int h) {
    gluPerspective (1, (GLfloat)w / (GLfloat)h, 50 , 1); //set the perspective (angle of sight, width, height, ,depth)
    glMatrixMode(GL_MODELVIEW);
 }
-
-/*
-GLvoid gestionSouris(int x, int y) {
-	angleX = float(x/2) * 720.0f / float(WIDTH); //gere l'axe Oy
-	angleY = - ( float(y/2) * 180.0f / float(HEIGHT - 90.0f) ) * 4.0f; //gere l'axe Ox
-
-	glutPostRedisplay();
-}
-()*/
-
-/*
-GLvoid gestionFleche(int key, int x, int y) {
-	switch (key) {
-		case GLUT_KEY_UP :
-			tz += int(pasDeplacement);
-		break;
-
-		case GLUT_KEY_DOWN :
-			tz -= int(pasDeplacement);
-		break;
-	}
-	glutPostRedisplay();
-}
-*/
-
-
-/*
-GLvoid window_key_down(unsigned char key, int x, int y)  { //appuie des touches
-	switch (key) {
-		//deplacement de la camera
-		case 'z':
-			ty += int(pasDeplacement);
-		break;
-
-		case 's':
-			ty -= int(pasDeplacement);
-		break;
-
-		case 'q':
-			tx -= int(pasDeplacement);
-		break;
-
-		case 'd':
-			tx += int(pasDeplacement);
-		break;
-
-		case 'r':
-			tz += int(pasDeplacement);
-		break;
-
-		case 'f':
-			tz -= int(pasDeplacement);
-		break;
-
-		case 'p':
-			nbPoints++;
-		break;
-
-		case 'm':
-			if(nbPoints > 1) nbPoints--;
-		break;
-
-	//sortie
-		case KEY_ESC:
-			exit(0);
-			break;
-
-		default:
-			cerr << "Touche " << key << " non active.\n";
-		break;
-	}
-
-	glutPostRedisplay();
-}
-*/
-
-/*
-GLvoid window_idle()
-{
-	angle+=0.1f;
-glutPostRedisplay();
-}
-*/
-
-//*****************************************AJOUT DE FREE FLY CAMERA****************************************************************
-
-/*
-void Display (void) {
-    glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the color buffer and the depth buffer
-    glLoadIdentity();
-
-	g_camera.Refresh();
-
-    glColor3f(0,1,0);
-
-    glutWireTeapot(0.5);
-
-    glutSwapBuffers(); //swap the buffers
-}
-*/
-
-/*
-void Reshape (int w, int h) {
-    g_viewport_width = w;
-    g_viewport_height = h;
-
-    glViewport (0, 0, (GLsizei)w, (GLsizei)h); //set the viewport to the current window specifications
-    glMatrixMode (GL_PROJECTION); //set the matrix to projection
-
-    glLoadIdentity ();
-    gluPerspective (60, (GLfloat)w / (GLfloat)h, 0.1 , 100.0); //set the perspective (angle of sight, width, height, ,depth)
-    glMatrixMode (GL_MODELVIEW); //set the matrix back to model
-}
-*/
 
 void Keyboard(unsigned char key, int x, int y)
 {
@@ -568,6 +278,7 @@ void Timer(int value)
 
 void Idle()
 {
+		indice += 0.1f;
     display();
 }
 
@@ -593,8 +304,6 @@ void Mouse(int button, int state, int x, int y)
 
 void MouseMotion(int x, int y)
 {
-    // This variable is hack to stop glutWarpPointer from triggering an event callback to Mouse(...)
-    // This avoids it being called recursively and hanging up the event loop
     static bool just_warped = false;
 
     if(just_warped) {
@@ -629,32 +338,19 @@ int main(int argc, char **argv) {
 	glutCreateWindow("Projet Gare : C.HEMBISE / F.DUBOIS / A.RATO");
 	glutIgnoreKeyRepeat(1);
 
-
-
-    glutTimerFunc(1, Timer, 0);
-
-
-
-
+  glutTimerFunc(1, Timer, 0);
 
 	init();
-
 	//Ajout pour la caméra
-    glutMouseFunc(Mouse);
-    glutMotionFunc(MouseMotion);
-    glutPassiveMotionFunc(MouseMotion);
-    glutKeyboardFunc(Keyboard);
-    glutKeyboardUpFunc(KeyboardUp);
-    glutIdleFunc(Idle);
+  glutMouseFunc(Mouse);
+  glutMotionFunc(MouseMotion);
+  glutPassiveMotionFunc(MouseMotion);
+  glutKeyboardFunc(Keyboard);
+  glutKeyboardUpFunc(KeyboardUp);
+  glutIdleFunc(Idle);
 
 	glutReshapeFunc(reshape);
-	//glutKeyboardFunc(&window_key_down);
-	//glutDisplayFunc(display);
-	//glutPassiveMotionFunc(gestionSouris);
-	//glutSpecialFunc(&gestionFleche);
-	//glutIdleFunc(&window_idle);
-
 	glutMainLoop();
 
-return (EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
