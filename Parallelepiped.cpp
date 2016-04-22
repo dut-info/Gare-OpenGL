@@ -58,6 +58,7 @@ void normal(Point p0, Point p1, Point p2) {
 	double z = vect1X*vect2Y-vect2X*vect1Y;
 
 	glNormal3d(x, y, z);
+
 }
 
 void Parallelepiped::modelize(float indice) {
@@ -88,10 +89,10 @@ void Parallelepiped::modelize(float indice) {
 		Object::glVertex3f(points[1]);
 		Object::glVertex3f(points[0]);
 		Object::glVertex3f(points[4]);
-		normal(points[6], points[7], points[4]);
+		normal(points[5], points[6], points[7]);
+		Object::glVertex3f(points[5]);
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[7]);
 		Object::glVertex3f(points[4]);
-		Object::glVertex3f(points[5]);
 	glEnd();
 }

@@ -37,6 +37,7 @@
 #include "Train.h"
 #include "Locomotive.hpp"
 #include "Wagon.hpp"
+#include "Sol.hpp"
 
 #include "BezierCurve.h"
 #include <vector>
@@ -98,7 +99,7 @@ const float g_rotation_speed = M_PI/180*0.02;
 
 /* initialisation d'OpenGL*/
 static void init() {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
 	// Si vous avez des choses à initialiser, c'est ici.
 
@@ -163,6 +164,14 @@ void display(void) {
 
 	glRotatef(-90, 1, 0, 0);
 
+	// Gare
+	Sol sol;
+	glPushMatrix();
+		glScaled(2.5, 2, 2);
+		glTranslated(0,-10.3,0);
+		sol.draw();
+	glPopMatrix();
+
 	// RAILS
 	RailDroit rail1(200, 2.2);
 	RailDroit rail2(200, 2.2);
@@ -185,14 +194,14 @@ void display(void) {
 
 	// Animation du train
 	float start = 50;
-	float end = 58;
+	float end = 60;
 	float restart = 65;
 	float aCoef = (2*M_PI/(start-end));
 	float bCoef = -aCoef * start;
 
 	if(indice >= start && indice <= end) { // déceleration
 			float map =  aCoef * indice + bCoef;
-		  mvnt += 0.1f * ((1 - cos(0.5f * map + M_PI)) / 2);
+		  mvnt += 0.1f * ((1 - cos(0.25f * map + M_PI)) / 2);
 	} else if(indice >= end && indice <= restart) { // pause
 			mvnt += 0.0f;
 	} else { //reprise

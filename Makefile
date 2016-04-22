@@ -23,7 +23,7 @@ PATH_SRC=.
 #Cree l'executable sous Linux
 all: $(EXEC)
 
-$(EXEC): TestObject.o Object.o Point.o Parallelepiped.o RailDroit.o BezierCurve.o Train.o Locomotive.o Wagon.o Roue.o Tube.o Chemine.o
+$(EXEC): TestObject.o Object.o Point.o Parallelepiped.o RailDroit.o BezierCurve.o Train.o Locomotive.o Wagon.o Roue.o Tube.o Chemine.o Sol.o Toure.o TourePetite.o
 	$(COMPILO) -o $@ $^ $(LIBS)
 
 TestObject.o:  $(PATH_SRC)/TestObject.cpp

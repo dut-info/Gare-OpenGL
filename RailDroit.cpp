@@ -39,6 +39,7 @@ void RailDroit::modelize(float indice)
 
 	int nb_ballast = (int) longueur / (balast_width+balast_spaces);
 	glPushMatrix();
+	glColor3f(0.75f, 0.25f, 0.25f);
 	for (int i = 0; i < nb_ballast; ++i)
 	{
 		glTranslated(balast_spaces, 0, 0);
@@ -48,6 +49,7 @@ void RailDroit::modelize(float indice)
 	glPopMatrix();
 
 	//glPushMatrix();
+		glColor3f(0.6f, 0.6f, 0.6f);
 		glTranslated(0, ballast_margin, balast_height);
 		Parallelepiped r1(longueur, rail_width, 0.2);
 		r1.draw();
