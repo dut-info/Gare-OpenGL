@@ -1,5 +1,6 @@
 #include "Roue.h"
 #include "Object.h"
+#include "Parallelepiped.h"
 
 #ifdef __APPLE__
 //compilation sous MacOs par :
@@ -38,6 +39,12 @@ void Roue::modelize(float indice) {
   glTranslated(0, epaisseur/2, 0);
   // place la roue sur le bon axe
   glRotatef(90, 1, 0, 0);
+
+  Parallelepiped p(hauteur,0.3,0.15);
+  glPushMatrix();
+    glTranslated(-hauteur/2,-0.15,.3);
+    p.draw();
+  glPopMatrix();
 
   gluQuadricDrawStyle(params,GLU_FILL);
   gluCylinder(params, hauteur, hauteur, epaisseur, 20, 1);
