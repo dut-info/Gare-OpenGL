@@ -16,12 +16,6 @@ Point BezierCurve::getTan(double t)
 
 Point BezierCurve::getPoint(double t)
 {
-  /*
-  if(t < 0 || t > 1) {
-    throw std::invalid_argument("0 < t < 1");
-  }
-  */
-
   std::vector<Point> tmp = std::vector<Point>(this->points);
 
   for (int i = tmp.size() - 1; i > 0; i--) {
@@ -29,9 +23,9 @@ Point BezierCurve::getPoint(double t)
         tmp[k] = tmp[k] + ( tmp[k+1] - tmp[k] ) * t;
   }
 
-  Point answer = tmp[0];
-  //delete[] tmp;
-  return answer;
+  Point result = tmp[0];
+  //delete tmp;
+  return result;
 }
 
 Point BezierCurve::getNextPoint()

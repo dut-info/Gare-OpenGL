@@ -149,11 +149,11 @@ void display(void) {
 	glPopMatrix();
 
 	// RAILS
-	RailDroit rail1(200, 2.2);
-	RailDroit rail2(200, 2.2);
+	RailDroit rail1(300, 2.2);
+	RailDroit rail2(300, 2.2);
 
 	glPushMatrix();
-		glTranslatef(-100, 0, 0);
+		glTranslatef(-150, 0, 0);
 		rail1.draw();
 
 		glPushMatrix();
