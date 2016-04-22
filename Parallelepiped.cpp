@@ -87,7 +87,7 @@ void Parallelepiped::modelize(float indice) {
 		Object::glVertex3f(points[1]);
 		Object::glVertex3f(points[0]);
 		Object::glVertex3f(points[4]);
-		normal(points[5], points[6], points[7]);
+		//normal(points[5], points[6], points[7]);
 		Object::glVertex3f(points[5]);
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[7]);

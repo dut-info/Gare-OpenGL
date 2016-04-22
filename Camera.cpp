@@ -6,11 +6,11 @@
 void Camera::Init()
 {
 	//Angle initiale de la caméra
-	m_yaw = 68.8214; // X
-  	m_pitch = -0.3; // Y
- 
+		m_yaw = 68.8214; // X
+  	m_pitch = -0.212389; // Y
+
  		//  X    Y    Z
-  	SetPos(-25, 17, -40); //Position initiale de la caméra
+  	SetPos(-68.0282, 20.1738, 20.3925); //Position initiale de la caméra
 }
 
 void Camera::Refresh()

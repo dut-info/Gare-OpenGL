@@ -170,14 +170,14 @@ void display(void) {
 
 	// Animation du train
 	float start = 50;
-	float end = 60;
-	float restart = 65;
-	float aCoef = (2*M_PI/(start-end));
+	float end = 70;
+	float restart = 75;
+	float aCoef = (4/(end-start));
 	float bCoef = -aCoef * start;
 
 	if(indice >= start && indice <= end) { // déceleration
 			float map =  aCoef * indice + bCoef;
-		  mvnt += 0.1f * ((1 - cos(0.25f * map + M_PI)) / 2);
+		  mvnt += 0.1f * ((1 + cos(0.25f * (map * M_PI) )) / 2);
 	} else if(indice >= end && indice <= restart) { // pause
 			mvnt += 0.0f;
 	} else { //reprise
@@ -220,7 +220,7 @@ void Keyboard(unsigned char key, int x, int y)
     if(key == ' ') { //Si la touche appuyé est la touche espace, inveré le mode Freely (sortir et entrer en mode FPS)
         g_fps_mode = !g_fps_mode;
 
-        if(g_fps_mode) { 
+        if(g_fps_mode) {
             glutSetCursor(GLUT_CURSOR_NONE); //Cacher le curseur
             glutWarpPointer(g_viewport_width/2, g_viewport_height/2); //Appliquer le scale
         }
