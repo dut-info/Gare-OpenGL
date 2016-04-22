@@ -5,16 +5,17 @@
 
 void Camera::Init()
 {
-	m_yaw = 68.8214;
-	m_pitch = -0.212389;
-
-	SetPos(-68.0282, 20.1738, 20.3925);
+	//Angle initiale de la caméra
+	m_yaw = 68.8214; // X
+  	m_pitch = -0.3; // Y
+ 
+ 		//  X    Y    Z
+  	SetPos(-25, 17, -40); //Position initiale de la caméra
 }
 
 void Camera::Refresh()
 {
-	// Camera parameter according to Riegl's co-ordinate system
-	// x/y for flat, z for height
+	// Paramètres pour rélger les coordonnées de la caméra (cos & sin pour gérer l'angle)
 	m_lx = cos(m_yaw) * cos(m_pitch);
 	m_ly = sin(m_pitch);
 	m_lz = sin(m_yaw) * cos(m_pitch);
@@ -24,20 +25,20 @@ void Camera::Refresh()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(m_x, m_y, m_z, m_x + m_lx, m_y + m_ly, m_z + m_lz, 0.0,1.0,0.0);
-
-	//printf("Camera: %f %f %f Direction vector: %f %f %f\n", m_x, m_y, m_z, m_lx, m_ly, m_lz);
+	gluLookAt(m_x, m_y, m_z, m_x + m_lx, m_y + m_ly, m_z + m_lz, 0.0,1.0,0.0); //Caméra + vecteur de direction
 }
 
+	//Positionner la caméra (x, y, z)
 void Camera::SetPos(float x, float y, float z)
 {
 	m_x = x;
 	m_y = y;
 	m_z =z;
 
-	Refresh();
+	Refresh(); //Actualisation de la position
 }
 
+	//Obtenir la position de la caméra
 void Camera::GetPos(float &x, float &y, float &z)
 {
     x = m_x;
@@ -45,6 +46,7 @@ void Camera::GetPos(float &x, float &y, float &z)
     z = m_z;
 }
 
+	//Obtenir les vecteurs de directions
 void Camera::GetDirectionVector(float &x, float &y, float &z)
 {
     x = m_lx;
@@ -52,12 +54,14 @@ void Camera::GetDirectionVector(float &x, float &y, float &z)
     z = m_lz;
 }
 
+	//Deplacement de la caméra (avancer / reculer)
 void Camera::Move(float incr)
 {
     float lx = cos(m_yaw)*cos(m_pitch);
     float ly = sin(m_pitch);
     float lz = sin(m_yaw)*cos(m_pitch);
 
+    //Incrementation des axes pour avancer ou reculer (en fonction du nombre positif ou negatif)
 	m_x = m_x + incr*lx;
 	m_y = m_y + incr*ly;
 	m_z = m_z + incr*lz;
@@ -65,21 +69,27 @@ void Camera::Move(float incr)
 	Refresh();
 }
 
+
+	//Deplacement latérals de la caméra (gauche / droite)
 void Camera::Strafe(float incr)
 {
+	//Incrementation des axes pour aller à gauche ou à droite (en fonction du nombre positif ou negatif)
 	m_x = m_x + incr*m_strafe_lx;
 	m_z = m_z + incr*m_strafe_lz;
 
 	Refresh();
 }
 
+	//Déplacements horizontals de la caméra (haut / bas)
 void Camera::Fly(float incr)
 {
+	//Incrementation des axes pour monter ou descendre (en fonction du nombre positif ou negatif)
 	m_y = m_y + incr;
 
 	Refresh();
 }
 
+	//Pivoter l'angle x de la caméra
 void Camera::RotateYaw(float angle)
 {
 	m_yaw += angle;
@@ -87,12 +97,14 @@ void Camera::RotateYaw(float angle)
 	Refresh();
 }
 
+	//Pivoter l'angle y de la caméra
 void Camera::RotatePitch(float angle)
 {
     const float limit = 89.0 * M_PI / 180.0;
 
 	m_pitch += angle;
 
+	//Ajout de limites pour que la caméra ne puisse pas aller au dessus de 90° en regardant en haut et en bas
     if(m_pitch < -limit)
         m_pitch = -limit;
 
@@ -102,6 +114,7 @@ void Camera::RotatePitch(float angle)
 	Refresh();
 }
 
+	//Définir l'angle sur X
 void Camera::SetYaw(float angle)
 {
 	m_yaw = angle;
@@ -109,6 +122,7 @@ void Camera::SetYaw(float angle)
 	Refresh();
 }
 
+	//Définir l'angle sur Y
 void Camera::SetPitch(float angle)
 {
     m_pitch = angle;

@@ -40,6 +40,16 @@ void Locomotive::modelize(float indice) {
     Roue r3;
     Roue r4;
 
+
+    /*GLubyte Texture[16] =
+    {
+    0,0,0,0, 0xFF,0xFF,0xFF,0xFF,
+    0xFF,0xFF,0xFF,0xFF, 0,0,0,0
+    };
+        //Image (2x2)
+    GLuint Nom;
+    */
+
     Chemine che;
 
     Parallelepiped c(6,1.8,2);
@@ -61,6 +71,28 @@ void Locomotive::modelize(float indice) {
     glTranslated(2, -1.6, 0);
     che.draw();
     glPopMatrix();
+
+
+   /* glClearColor(.5,.5,.5,0);   //Change la couleur du fond
+    glEnable(GL_DEPTH_TEST);    //Active le depth test
+    glEnable(GL_TEXTURE_2D);    //Active le texturing
+    glGenTextures(1,&Nom);  //Génère un n° de texture
+    glBindTexture(GL_TEXTURE_2D,Nom);   //Sélectionne ce n°
+    glTexImage2D (
+        GL_TEXTURE_2D,  //Type : texture 2D
+    0,  //Mipmap : aucun
+    4,  //Couleurs : 4
+    2,  //Largeur : 2
+    2,  //Hauteur : 2
+    0,  //Largeur du bord : 0
+    GL_RGBA,    //Format : RGBA
+    GL_UNSIGNED_BYTE,   //Type des couleurs
+    Texture     //Addresse de l'image
+    );  
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);*/
+
 
     //roue arriere droit
     glPushMatrix();
@@ -90,6 +122,10 @@ void Locomotive::modelize(float indice) {
     r4.draw();
     glPopMatrix();
 
+
+   //glDisable(GL_TEXTURE_2D);    //Desactive le texturing
+    
+
     glPushMatrix();
     glTranslated(-3.5,-0.2,0);
     t2.draw();
@@ -100,7 +136,4 @@ void Locomotive::modelize(float indice) {
     glColor3f (0.1f , 0.8f, 0.8f);
     c.draw();
     glPopMatrix();
-
-
-
 }

@@ -65,20 +65,19 @@ void Timer(int value);
 void Idle();
 
 //Declaration des variables et de la FreeFlyCaméra
-Camera g_camera;
-bool g_key[256];
-bool g_shift_down = false;
-bool g_fps_mode = false;
-int g_viewport_width = 0;
-int g_viewport_height = 0;
-bool g_mouse_left_down = false;
-bool g_mouse_right_down = false;
+Camera g_camera; //Objet de Camera.cpp
+bool g_key[256]; //Touches disponibles
+bool g_shift_down = false; //Booleen pour vérifier si la touche est appuyée(true) ou non(false)
+bool g_fps_mode = false; //Boolean pour vérifier si le FPS (Camera FreeFly) est activée ou non.
+int g_viewport_width = 0; //Largeur de la fenetre
+int g_viewport_height = 0; //Hauteur de la fenetre
+bool g_mouse_left_down = false; //Booleen pour vérifier les mouvements de la souris
+bool g_mouse_right_down = false; //Booleen pour vérifier les mouvements de la souris
 
 float angleX = 0.0f; //angle de rotation en Y de la scene
 float angleY = 0.0f; //angle de rotation en X de la scene
 
 //float pasDeplacement = 1.25f;
-
 
 //position lumiere
 float xLitePos = 0.0f;
@@ -94,14 +93,13 @@ int nbPoints = 10;
 float indice, mvnt = 0;
 
 //Vitesse des mouvements de la caméra
-const float g_translation_speed = 0.3;
-const float g_rotation_speed = M_PI/180*0.02;
+const float g_translation_speed = 0.3; //Vitesse de la translation
+const float g_rotation_speed = M_PI/180*0.02; //Vitesse de la rotation
 
 /* initialisation d'OpenGL*/
 static void init() {
 	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
-	// Si vous avez des choses à initialiser, c'est ici.
 
 	glEnable(GL_LIGHTING); 	// Active l'éclairage
   	glEnable(GL_LIGHT0); 	// Allume la lumière n°1
@@ -129,27 +127,6 @@ static void init() {
     glMateriali(GL_FRONT_AND_BACK,GL_SHININESS,shiny_obj);
 }
 
-void affiche_repere() {
-	//affiche les axes du repere
-	glColor3f ( 0.0f, 1.0f, 0.0f ); //Y vert
-	glBegin(GL_LINES);
-		glVertex3f ( 0.0f, 0.0f, 0.0f );
-		glVertex3f ( 0.0f, 20.0f, 0.0f );
-	glEnd();
-
-	glColor3f ( 0.0f, 0.0f, 1.0f ); //Z bleu
-	glBegin(GL_LINES);
-		glVertex3f ( 0.0f, 0.0f, 0.0f );
-		glVertex3f ( 0.0f, 0.0f, 20.0f );
-	glEnd();
-
-	glColor3f ( 1.0f, 0.0f, 0.0f); //X rouge
-	glBegin(GL_LINES);
-		glVertex3f ( 0.0f, 0.0f, 0.0f );
-		glVertex3f ( 20.0f, 0.0f, 0.0f );
-	glEnd();
-}
-
 /* Dessin */
 void display(void) {
 	glClearColor (0.0,0.0,0.0,1.0); //clear the screen to black
@@ -157,8 +134,7 @@ void display(void) {
 
 	glLoadIdentity();
 
-	affiche_repere();
-	g_camera.Refresh();
+	g_camera.Refresh(); //Actualisation de la caméra
 
   glColor3f(1.0f, 0.15f, 0.15f);
 
@@ -231,28 +207,29 @@ void reshape(int w, int h) {
    glLoadIdentity();
    //gluPerspective(70,(double)700/700,0,2000);
    glOrtho ( -20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f);
-   gluPerspective (1, (GLfloat)w / (GLfloat)h, 50 , 1); //set the perspective (angle of sight, width, height, ,depth)
+   gluPerspective (1, (GLfloat)w / (GLfloat)h, 50 , 1); //(angle of sight, width, height, ,depth)
    glMatrixMode(GL_MODELVIEW);
 }
 
 void Keyboard(unsigned char key, int x, int y)
 {
-    if(key == 27) {
+    if(key == 27) { //Si la touche appuyé est la touche 27 (Echap), alors quitter le programme
         exit(0);
     }
 
-    if(key == ' ') {
+    if(key == ' ') { //Si la touche appuyé est la touche espace, inveré le mode Freely (sortir et entrer en mode FPS)
         g_fps_mode = !g_fps_mode;
 
-        if(g_fps_mode) {
-            glutSetCursor(GLUT_CURSOR_NONE);
-            glutWarpPointer(g_viewport_width/2, g_viewport_height/2);
+        if(g_fps_mode) { 
+            glutSetCursor(GLUT_CURSOR_NONE); //Cacher le curseur
+            glutWarpPointer(g_viewport_width/2, g_viewport_height/2); //Appliquer le scale
         }
         else {
-            glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+            glutSetCursor(GLUT_CURSOR_LEFT_ARROW); //Afficher le curseur
         }
     }
 
+    //Continuer l'action si la touche est toujours appuyé
     if(glutGetModifiers() == GLUT_ACTIVE_SHIFT) {
         g_shift_down = true;
     }
@@ -265,29 +242,29 @@ void Keyboard(unsigned char key, int x, int y)
 
 void KeyboardUp(unsigned char key, int x, int y)
 {
-    g_key[key] = false;
+    g_key[key] = false; // Mettre le booleen en off lorsque la touche est relaché
 }
 
 void Timer(int value)
 {
     if(g_fps_mode) {
-        if(g_key['z'] || g_key['Z']) {
-            g_camera.Move(g_translation_speed);
+        if(g_key['z'] || g_key['Z']) {				//Si la touche "z" ou "Z" est appuyé :
+            g_camera.Move(g_translation_speed);		//Aller en avant
         }
-        else if(g_key['s'] || g_key['S']) {
-            g_camera.Move(-g_translation_speed);
+        else if(g_key['s'] || g_key['S']) {			//Si la touche "s" ou "S" est appuyé :
+            g_camera.Move(-g_translation_speed);	//Aller en arrière
         }
-        else if(g_key['q'] || g_key['Q']) {
-            g_camera.Strafe(g_translation_speed);
+        else if(g_key['q'] || g_key['Q']) {			//Si la touche "q" ou "Q" est appuyé :
+            g_camera.Strafe(g_translation_speed);	//Aller vers la gauche
         }
-        else if(g_key['d'] || g_key['D']) {
-            g_camera.Strafe(-g_translation_speed);
+        else if(g_key['d'] || g_key['D']) {			//Si la touche "d" ou "D" est appuyé :
+            g_camera.Strafe(-g_translation_speed);	//Aller vers la droite
         }
-        else if(g_mouse_left_down) {
-            g_camera.Fly(g_translation_speed);
+        else if(g_mouse_left_down) {				//Si la souris est déplacé vers la gauche :
+            g_camera.Fly(g_translation_speed);		//Tourner la caméra vers la gauche
         }
-        else if(g_mouse_right_down) {
-            g_camera.Fly(-g_translation_speed);
+        else if(g_mouse_right_down) {				//Si la souris est déplacé vers la droite :
+            g_camera.Fly(-g_translation_speed);		//Tourner la caméra vers la droite
         }
     }
 
@@ -296,52 +273,55 @@ void Timer(int value)
 
 void Idle()
 {
-		indice += 0.1f;
+	indice += 0.1f;
     display();
 }
 
 void Mouse(int button, int state, int x, int y)
 {
-    if(state == GLUT_DOWN) {
-        if(button == GLUT_LEFT_BUTTON) {
-            g_mouse_left_down = true;
+    if(state == GLUT_DOWN) { 					//Si l'un des clics de la souris est appuyé, alors :
+        if(button == GLUT_LEFT_BUTTON) {		//Si c'est le clic gauche,
+            g_mouse_left_down = true;			//Mettre le booleen clic gauche à true
         }
-        else if(button == GLUT_RIGHT_BUTTON) {
-            g_mouse_right_down = true;
+        else if(button == GLUT_RIGHT_BUTTON) {	//Sinon si c'est le clic droit,
+            g_mouse_right_down = true;			//MEttre le booleen clic droit à true
         }
     }
-    else if(state == GLUT_UP) {
-        if(button == GLUT_LEFT_BUTTON) {
-            g_mouse_left_down = false;
+    else if(state == GLUT_UP) {					//Si l'un des clics de la souris est relaché, alors :
+        if(button == GLUT_LEFT_BUTTON) {		//Si c'est le clic gauche,
+            g_mouse_left_down = false;			//Mettre le booleen clic gauche à false
         }
-        else if(button == GLUT_RIGHT_BUTTON) {
-            g_mouse_right_down = false;
+        else if(button == GLUT_RIGHT_BUTTON) {	//Sinon si c'est le clic droit,
+            g_mouse_right_down = false;			//Mettre le booleen de clic droit à false
         }
     }
 }
 
 void MouseMotion(int x, int y)
 {
-    static bool just_warped = false;
-
+    static bool just_warped = false;			//Ce booleen est la pour que la souris ne sorte pas de la fenetre lors du mode FPS,
+    											// pour pouvoir bouger la vu sans perdre le focus de la fenetre.
     if(just_warped) {
-        just_warped = false;
-        return;
+        just_warped = false;					//Cette condition est présente pour repasser le booleen a false lorsque le mode FPS
+        return;									// est quitté
     }
 
     if(g_fps_mode) {
-        int dx = x - g_viewport_width/2;
-        int dy = g_viewport_height/2 - y;
+    	//Si l'on inverse l'axe avec la taille de la fenetre (largeur ou hauteur), les déplacement de la caméra à la souris seront inversés
+        int dx = x - g_viewport_width/2; 		//calcul la distance entre le centre de la fenetre (la ou est la vision actuelle) et
+        										// la position de la souris
+        int dy = g_viewport_height/2 - y;		//calcul la distance entre le centre de la fenetre (la ou est la vision actuelle) et
+        										// la position de la souris
 
         if(dx) {
-            g_camera.RotateYaw(g_rotation_speed*dx);
-        }
+            g_camera.RotateYaw(g_rotation_speed*dx);		//Si l'axe x de la souris est bougé, la caméra va bouger à la vitesse du ratio
+        }													// vitesse de rotation * nb de pixel déplacé par le mouvement de la souris
 
         if(dy) {
-            g_camera.RotatePitch(g_rotation_speed*dy);
-        }
+            g_camera.RotatePitch(g_rotation_speed*dy);		//Si l'axe y de la souris est bougé, la caméra va bouger à la vitesse du ratio
+        }													// vitesse de rotation * nb de pixel déplacé par le mouvement de la souris
 
-        glutWarpPointer(g_viewport_width/2, g_viewport_height/2);
+        glutWarpPointer(g_viewport_width/2, g_viewport_height/2); // Fait en sorte que le pointeur de la souris reste au milieu de la fenêtre
 
         just_warped = true;
     }
@@ -349,24 +329,24 @@ void MouseMotion(int x, int y)
 
 //*****************MAIN*****************MAIN****************MAIN****************MAIN********************
 int main(int argc, char **argv) {
-	//Ajout pour la caméra
-	glutInitWindowSize(WIDTH, HEIGHT);
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("Projet Gare : C.HEMBISE / F.DUBOIS / A.RATO");
-	glutIgnoreKeyRepeat(1);
 
-  glutTimerFunc(1, Timer, 0);
+	//Initialisation de la fenêtre
+  	glutInitWindowSize(WIDTH, HEIGHT);
+  	glutInit(&argc, argv);
+  	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  	glutCreateWindow("Projet Gare : C.HEMBISE / F.DUBOIS / A.RATO");
+  	glutIgnoreKeyRepeat(1);
+  	glutTimerFunc(1, Timer, 0);
 
-	init();
-	//Ajout pour la caméra
-  glutMouseFunc(Mouse);
-  glutMotionFunc(MouseMotion);
-  glutPassiveMotionFunc(MouseMotion);
-  glutKeyboardFunc(Keyboard);
-  glutKeyboardUpFunc(KeyboardUp);
-  glutIdleFunc(Idle);
+  	init();
 
+  	//Appel des fonctions
+  	glutMouseFunc(Mouse);
+  	glutMotionFunc(MouseMotion);
+  	glutPassiveMotionFunc(MouseMotion);
+  	glutKeyboardFunc(Keyboard);
+  	glutKeyboardUpFunc(KeyboardUp);
+  	glutIdleFunc(Idle);
 	glutReshapeFunc(reshape);
 	glutMainLoop();
 

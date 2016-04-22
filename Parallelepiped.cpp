@@ -12,9 +12,9 @@
 
 #ifdef __WIN32__
 //parce qu'il manque des choses aux gens qui utilisent MsWindows, où OpenGL ne peut fonctionner que s'il discute avec le gestionnaire de fenêtres ("windows.h")
-#define GLUT_DISABLE_ATEXIT_HACK	//utile si vous compilez en g++ sous windows avec le glut.lib prévu pour MsVisual
+#define GLUT_DISABLE_ATEXIT_HACK  //utile si vous compilez en g++ sous windows avec le glut.lib prévu pour MsVisual
 #include <windows.h>
-#include "glut.h"	//il faut avoir le fichier "glut.h" dans le même répertoire que votre .cpp (et aussi le glut.lib et le glut.dll)
+#include "glut.h"  //il faut avoir le fichier "glut.h" dans le même répertoire que votre .cpp (et aussi le glut.lib et le glut.dll)
 #endif
 
 #ifdef __linux__
@@ -23,8 +23,7 @@
 #include <GL/glut.h>
 #endif
 
-
-Parallelepiped::Parallelepiped(double x, double y, double z)
+Parallelepiped::Parallelepiped(double x = 1, double y = 1, double z = 1)
 {
 	points = new Point[8];
 
@@ -62,7 +61,6 @@ void normal(Point p0, Point p1, Point p2) {
 }
 
 void Parallelepiped::modelize(float indice) {
-	//glTranslated(-1, -1, 0);
 	glBegin(GL_QUADS);
 		normal(points[0], points[1], points[2]);
 		Object::glVertex3f(points[0]);
@@ -94,5 +92,37 @@ void Parallelepiped::modelize(float indice) {
 		Object::glVertex3f(points[6]);
 		Object::glVertex3f(points[7]);
 		Object::glVertex3f(points[4]);
+
+/*
+		glTexCoord2f(points[0].x,points[0].y);Object::glVertex3f(points[0]);
+		glTexCoord2f(points[1].x,points[1].y);Object::glVertex3f(points[1]);
+		glTexCoord2f(points[2].x,points[2].y);Object::glVertex3f(points[2]);
+		glTexCoord2f(points[3].x,points[3].y);Object::glVertex3f(points[3]);
+		normal(points[1], points[7], points[6]);
+		glTexCoord2f(points[1].x,points[1].y);Object::glVertex3f(points[1]);
+		glTexCoord2f(points[7].x,points[7].y);Object::glVertex3f(points[7]);
+		glTexCoord2f(points[6].x,points[6].y);Object::glVertex3f(points[6]);
+		glTexCoord2f(points[2].x,points[2].y);Object::glVertex3f(points[2]);
+		normal(points[2], points[6], points[5]);
+		glTexCoord2f(points[2].x,points[2].y);Object::glVertex3f(points[2]);
+		glTexCoord2f(points[6].x,points[6].y);Object::glVertex3f(points[6]);
+		glTexCoord2f(points[5].x,points[5].y);Object::glVertex3f(points[5]);
+		glTexCoord2f(points[3].x,points[3].y);Object::glVertex3f(points[3]);
+		normal(points[5], points[4], points[0]);
+		glTexCoord2f(points[5].x,points[5].y);Object::glVertex3f(points[5]);
+		glTexCoord2f(points[4].x,points[4].y);Object::glVertex3f(points[4]);
+		glTexCoord2f(points[0].x,points[0].y);Object::glVertex3f(points[0]);
+		glTexCoord2f(points[3].x,points[3].y);Object::glVertex3f(points[3]);
+		normal(points[7], points[1], points[0]);
+		glTexCoord2f(points[7].x,points[7].y);Object::glVertex3f(points[7]);
+		glTexCoord2f(points[1].x,points[1].y);Object::glVertex3f(points[1]);
+		glTexCoord2f(points[0].x,points[0].y);Object::glVertex3f(points[0]);
+		glTexCoord2f(points[4].x,points[4].y);Object::glVertex3f(points[4]);
+		normal(points[6], points[7], points[4]);
+		glTexCoord2f(points[6].x,points[6].y);Object::glVertex3f(points[6]);
+		glTexCoord2f(points[7].x,points[7].y);Object::glVertex3f(points[7]);
+		glTexCoord2f(points[4].x,points[4].y);Object::glVertex3f(points[4]);
+		glTexCoord2f(points[5].x,points[5].y);Object::glVertex3f(points[5]);
+*/
 	glEnd();
 }
