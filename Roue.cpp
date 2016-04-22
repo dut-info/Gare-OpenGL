@@ -30,7 +30,7 @@ Roue::Roue() {
 
 }
 
-void Roue::modelize() {
+void Roue::modelize(float indice) {
   GLUquadric* params;
   params = gluNewQuadric();
 

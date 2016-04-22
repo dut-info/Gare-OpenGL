@@ -8,7 +8,7 @@ class Train : public Object
 public:
     Train();
 protected:
-    virtual void modelize();
+    virtual void modelize(float indice);
 };
 
-#endif 
+#endif

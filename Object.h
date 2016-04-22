@@ -7,11 +7,11 @@ class Object
 {
 public:
 	Object();
-	void draw();
+	void draw(float indice = -1);
 	static void glVertex3f(Point p);
 protected:
 	// x, y, z
-	virtual void modelize() = 0;
+	virtual void modelize(float indice) = 0;
 	double origin[3] = {0, 0, 0};
 	Point *points;
 };

@@ -8,7 +8,7 @@ class Tube : public Object
 public:
     Tube();
 protected:
-    virtual void modelize();
+    virtual void modelize(float indice);
 };
 
 #endif

@@ -29,7 +29,7 @@ RailDroit::RailDroit(double longueur, double espacement)
 	this->espacement = espacement;
 }
 
-void RailDroit::modelize()
+void RailDroit::modelize(float indice)
 {
 	double balast_height = 0.2;
 	double balast_width = 0.4;

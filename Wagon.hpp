@@ -8,7 +8,7 @@ class Wagon : public Object
 public:
     Wagon();
 protected:
-    virtual void modelize();
+    virtual void modelize(float indice);
 };
 
 #endif

@@ -27,18 +27,18 @@ const double epaisseur = 0.5;
 const double hauteur   = 0.17;
 
 Tube::Tube() {
-    
+
 }
 
-void Tube::modelize() {
+void Tube::modelize(float indice) {
     GLUquadric* params;
     params = gluNewQuadric();
-    
+
     // centre la roue
     glTranslated(0, epaisseur/2, 0);
     // place la roue sur le bon axe
     glRotatef(90, 1, 90, 0);
-    
+
     gluQuadricDrawStyle(params,GLU_FILL);
     gluCylinder(params, hauteur, hauteur, epaisseur, 20, 1);
     gluDisk(params, 0, hauteur, 20, 1);

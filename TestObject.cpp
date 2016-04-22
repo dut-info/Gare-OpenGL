@@ -90,7 +90,7 @@ float tz = 0.0f;
 
 int nbPoints = 10;
 
-float indice;
+float indice, mvnt = 0;
 
 //Vitesse des mouvements de la caméra
 const float g_translation_speed = 0.3;
@@ -182,22 +182,31 @@ void display(void) {
 	Train train1;
 	Train train2;
 
-	float mvnt = indice;
-/*
-	if(indice > 50 && indice < 70) {
-		mvnt =
 
-		3*(indice - 17.15) / sqrt(1 + (indice - 17.15)*(indice - 17.15)) + 2.95;
+	// Animation du train
+	float start = 50;
+	float end = 58;
+	float restart = 65;
+	float aCoef = (2*M_PI/(start-end));
+	float bCoef = -aCoef * start;
+
+	if(indice >= start && indice <= end) { // déceleration
+			float map =  aCoef * indice + bCoef;
+		  mvnt += 0.1f * ((1 - cos(0.5f * map + M_PI)) / 2);
+	} else if(indice >= end && indice <= restart) { // pause
+			mvnt += 0.0f;
+	} else { //reprise
+			mvnt += 0.1f;
 	}
-*/
+
 	glPushMatrix();
-		glTranslatef(mvnt/4-50, 1.5, 2.1);
-		train1.draw();
+		glTranslatef(mvnt/1-50, 1.5, 2.1);
+		train1.draw(mvnt);
 	glPopMatrix();
 
 	glPushMatrix();
-		glTranslatef(-mvnt/4+50, 6, 2.1);
-		train1.draw();
+		glTranslatef(-mvnt/1+50, 6, 2.1);
+		train2.draw(mvnt);
 	glPopMatrix();
 
 	glutSwapBuffers();// echange des buffers

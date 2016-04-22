@@ -3,9 +3,7 @@
 #include "Parallelepiped.h"
 #include "Roue.h"
 #include "Tube.hpp"
-
-
-
+#include <iostream>
 
 #ifdef __APPLE__
 //compilation sous MacOs par :
@@ -30,51 +28,56 @@
 
 
 Wagon::Wagon() {
-    
+
 }
 
-void Wagon::modelize() {
-   
+void Wagon::modelize(float indice) {
+
     Roue r1;
     Roue r2;
     Roue r3;
     Roue r4;
-    
+
     Parallelepiped c(6,1.8,2);
     Parallelepiped c1(6,1.8,0.5);
     Tube t;
     Tube t2;
 
 
-    
+
     glColor3f (0.9f , 0.3f, 0.2f);
 
     //roue arriere droit
     glPushMatrix();
+
     glTranslated(-2, -1.1,-1);
+    glRotatef(indice*15, 0, 1, 0);
     r1.draw();
     glPopMatrix();
-    
+
     //roue arriere gauche
     glPushMatrix();
     glTranslated(-2, 1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r2.draw();
     glPopMatrix();
-    
+
     //roue avant gauche
     glPushMatrix();
     glTranslated(2, -1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r3.draw();
     glPopMatrix();
-    
+
     //roue avant gauche
     glPushMatrix();
     glTranslated(2, 1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r4.draw();
     glPopMatrix();
 
-    
-    
+
+
     glPushMatrix();
     glTranslated(-3,-0.9, 1);
     c1.draw();
@@ -84,12 +87,12 @@ void Wagon::modelize() {
     glTranslated(3, -0.2,0);
     t.draw();
     glPopMatrix();
-    
+
     glPushMatrix();
     glTranslated(-3.5,-0.2,0);
     t2.draw();
     glPopMatrix();
-    
+
     glPushMatrix();
     glTranslated(-3,-0.9, -1);
     glColor3f (0.1f , 0.8f, 0.8f);

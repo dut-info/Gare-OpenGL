@@ -34,40 +34,40 @@
 #endif
 
 Train::Train() {
-    
+
 }
 
-void Train::modelize() {
+void Train::modelize(float indice) {
 
 
-    
+
     Locomotive l;
     Locomotive l1;
-    
+
 
 
     int nbWagons = 4;
     float longueur = ((nbWagons + 1) * 6 +(2*0.49) +3.95 )/ 2 ;
-    
-    
+
+
     glTranslated(longueur, 0, 0);
-    l.draw();
+    l.draw(indice);
     glPushMatrix();
-    
+
     for (int i = 0; i < nbWagons; i++) {
         Wagon w1;
         glTranslated(-7, 0, 0);
-        w1.draw();
+        w1.draw(indice);
     }
     glPopMatrix();
- 
-    
+
+
     glPushMatrix();
     glTranslated(- (longueur*2), 0.1, 0);
 
     glRotated(-180, 0, 0, 1);
     l1.draw();
     glPopMatrix();
- 
+
 
 }

@@ -8,7 +8,7 @@ class Locomotive : public Object
 public:
     Locomotive();
 protected:
-    virtual void modelize();
+    virtual void modelize(float indice);
 };
 
 #endif

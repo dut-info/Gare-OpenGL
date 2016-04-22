@@ -8,7 +8,7 @@ class Chemine : public Object
 public:
     Chemine();
 protected:
-    virtual void modelize();
+    virtual void modelize(float indice);
 };
 
 #endif

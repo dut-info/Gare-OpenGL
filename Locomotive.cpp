@@ -31,21 +31,21 @@
 
 
 Locomotive::Locomotive() {
-    
+
 }
 
-void Locomotive::modelize() {
+void Locomotive::modelize(float indice) {
     Roue r1;
     Roue r2;
     Roue r3;
     Roue r4;
-    
+
     Chemine che;
-    
+
     Parallelepiped c(6,1.8,2);
-    
+
     Parallelepiped ch(1,1,4);
-    
+
     Parallelepiped cb(3,1.8,1.4);
 
     Tube t2;
@@ -55,42 +55,46 @@ void Locomotive::modelize() {
     glTranslated(-3,-0.9,1);
     cb.draw();
     glPopMatrix();
-    
+
     //chemine
     glPushMatrix();
     glTranslated(2, -1.6, 0);
     che.draw();
     glPopMatrix();
-    
+
     //roue arriere droit
     glPushMatrix();
     glTranslated(-2, -1.1,-1);
+    glRotatef(indice*15, 0, 1, 0);
     r1.draw();
     glPopMatrix();
-    
+
     //roue arriere gauche
     glPushMatrix();
     glTranslated(-2, 1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r2.draw();
     glPopMatrix();
-    
+
     //roue avant gauche
     glPushMatrix();
     glTranslated(2, -1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r3.draw();
     glPopMatrix();
-    
+
     //roue avant gauche
     glPushMatrix();
     glTranslated(2, 1.1, -1);
+    glRotatef(indice*15, 0, 1, 0);
     r4.draw();
     glPopMatrix();
-    
+
     glPushMatrix();
     glTranslated(-3.5,-0.2,0);
     t2.draw();
     glPopMatrix();
-    
+
     glPushMatrix();
     glTranslated(-3,-0.9, -1);
     glColor3f (0.1f , 0.8f, 0.8f);

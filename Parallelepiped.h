@@ -8,7 +8,7 @@ class Parallelepiped : public Object
 public:
 	Parallelepiped(double x, double y, double z);
 protected:
-	virtual void modelize();
+	virtual void modelize(float indice);
 };
 
 #endif

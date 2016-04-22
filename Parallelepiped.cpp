@@ -60,7 +60,7 @@ void normal(Point p0, Point p1, Point p2) {
 	glNormal3d(x, y, z);
 }
 
-void Parallelepiped::modelize() {
+void Parallelepiped::modelize(float indice) {
 	//glTranslated(-1, -1, 0);
 	glBegin(GL_QUADS);
 		normal(points[0], points[1], points[2]);

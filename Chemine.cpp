@@ -27,18 +27,18 @@ const double epaisseur = 3;
 const double hauteur   = 0.5;
 
 Chemine::Chemine() {
-    
+
 }
 
-void Chemine::modelize() {
+void Chemine::modelize(float indice) {
     GLUquadric* params;
     params = gluNewQuadric();
-    
+
     // centre la roue
     glTranslated(0, epaisseur/2, 0);
     // place la roue sur le bon axe
     glRotatef(0, 1, 0, 0);
-    
+
     gluQuadricDrawStyle(params,GLU_FILL);
     gluCylinder(params, hauteur, hauteur, epaisseur, 20, 1);
     gluDisk(params, 0, hauteur, 20, 1);

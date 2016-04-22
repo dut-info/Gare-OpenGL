@@ -32,8 +32,8 @@ void Object::glVertex3f(Point p) {
 	glVertex3d(p.x, p.y, p.z);
 }
 
-void Object::draw() {
+void Object::draw(float indice) {
 	glPushMatrix();
-	modelize();
+	modelize(indice);
 	glPopMatrix();
 }

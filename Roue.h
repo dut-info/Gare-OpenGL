@@ -8,7 +8,7 @@ class Roue : public Object
 public:
 	Roue();
 protected:
-	virtual void modelize();
+	virtual void modelize(float indice);
 };
 
 #endif
